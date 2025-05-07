@@ -1,0 +1,6 @@
+higgstools/
+hsdataset/
+
+.vscode/
+
+setup_scripts/higgs_venv.tar.gz

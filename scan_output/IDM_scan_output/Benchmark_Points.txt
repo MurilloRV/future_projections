@@ -1,0 +1,11 @@
+
+if BP == "BP_0":
+
+    # Finding benchmark point BP_0, with constraints:
+    # min_lambda = 1.5
+    # max_lambda = inf
+    # max_delta_SingleHiggs = 0.005
+    # max_delta_gamgam = 0.015
+    # absolute_delta_kz = False
+    # maximize_delta_kz = False
+
