@@ -4,3 +4,4 @@ hsdataset/
 .vscode/
 
 setup_scripts/higgs_venv.tar.gz
+setup_scripts/higgs_venv_py38.tar.gz

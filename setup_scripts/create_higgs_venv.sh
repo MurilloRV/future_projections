@@ -8,7 +8,7 @@ module load miniforge/24.7.1-0-py312
 
 python -m venv higgs_venv
 source ./higgs_venv/bin/activate
-python -m pip install numpy scipy tqdm matplotlib
+python -m pip install numpy scipy tqdm matplotlib pandas
 python -m pip install ipykernel ipywidgets
 
 cd /cephfs/user/mrebuzzi/phd/HiggsTools/future_projections/higgstools/
