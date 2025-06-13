@@ -1,4 +1,6 @@
 #!/bin/bash
+source /etc/profile
+source $BUDDY/.bashrc_Rocky9
 
 cd /jwd
 rm -rf higgs_venv
