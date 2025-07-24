@@ -9,3 +9,280 @@ if BP == "BP_0":
     # absolute_delta_kz = False
     # maximize_delta_kz = False
 
+    kappas['uu'] = 0.9951626506866794
+    kappas['dd'] = 0.9951626506866794
+    kappas['ss'] = 0.9951626506866794
+    kappas['cc'] = 0.9951626506866794
+    kappas['bb'] = 0.9951626506866794
+    kappas['tt'] = 0.9951626506866794
+    kappas['ee'] = 0.9951626506866794
+    kappas['mumu'] = 0.9951626506866794
+    kappas['tautau'] = 0.9951626506866794
+    kappas['ZZ_0'] = 1.0010507073661603
+    kappas['ZZ_240'] = 1.0047983817820756
+    kappas['ZZ_365'] = 1.0010602943645246
+    kappas['ZZ_500'] = 0.9998784421726016
+    kappas['ZZ_550'] = 0.9996800012459942
+    kappas['ZZ'] = 0.9977727886031684
+    kappas['WW'] = 0.9977727886031684
+    kappas['lam'] = 1.6885444220830157
+    kappas['gamgam'] = 0.9851119781939329
+    kappas['Zgam'] = 0.9944879991522521
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240'])/(kappas['ZZ_240'] - 1) = 0.7790308456727357
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240']) = 0.003738087417550995
+    Mw = 80.35709227008113
+    sin2thetaEff = 0.2315235058034713
+    GammaZ = 2.4943351053320364
+    # Best scan point row: 1995 out of 14050
+
+if BP == "BP_1":
+
+    # Finding benchmark point BP_1, with constraints:
+    # min_lambda = 1.5
+    # max_lambda = inf
+    # max_delta_SingleHiggs = 0.005
+    # max_delta_gamgam = 0.015
+    # absolute_delta_kz = True
+    # maximize_delta_kz = False
+
+    kappas['uu'] = 0.9958390244744362
+    kappas['dd'] = 0.9958390244744362
+    kappas['ss'] = 0.9958390244744362
+    kappas['cc'] = 0.9958390244744362
+    kappas['bb'] = 0.9958390244744362
+    kappas['tt'] = 0.9958390244744362
+    kappas['ee'] = 0.9958390244744362
+    kappas['mumu'] = 0.9958390244744362
+    kappas['tautau'] = 0.9958390244744362
+    kappas['ZZ_0'] = 0.9994255438865846
+    kappas['ZZ_240'] = 1.0022422066243255
+    kappas['ZZ_365'] = 0.9996205177104408
+    kappas['ZZ_500'] = 0.9989265161483839
+    kappas['ZZ_550'] = 0.9988588243740757
+    kappas['ZZ'] = 0.996321215883244
+    kappas['WW'] = 0.996321215883244
+    kappas['lam'] = 1.5026696187124242
+    kappas['gamgam'] = 0.9851069592761637
+    kappas['Zgam'] = 0.9944857943543188
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240'])/(kappas['ZZ_240'] - 1) = 1.169245013123334
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240']) = 0.002621688913884701
+    Mw = 80.36739334215532
+    sin2thetaEff = 0.2314690313111513
+    GammaZ = 2.4949079898251485
+    # Best scan point row: 771 out of 14050
+
+if BP == "BP_2":
+
+    # Finding benchmark point BP_2, with constraints:
+    # min_lambda = 2.0
+    # max_lambda = inf
+    # max_delta_SingleHiggs = 0.05
+    # max_delta_gamgam = 0.05
+    # absolute_delta_kz = False
+    # maximize_delta_kz = False
+
+    kappas['uu'] = 0.989299511791139
+    kappas['dd'] = 0.989299511791139
+    kappas['ss'] = 0.989299511791139
+    kappas['cc'] = 0.989299511791139
+    kappas['bb'] = 0.989299511791139
+    kappas['tt'] = 0.989299511791139
+    kappas['ee'] = 0.989299511791139
+    kappas['mumu'] = 0.989299511791139
+    kappas['tautau'] = 0.989299511791139
+    kappas['ZZ_0'] = 1.0002280615561772
+    kappas['ZZ_240'] = 1.0065580594688865
+    kappas['ZZ_365'] = 1.0024068502567152
+    kappas['ZZ_500'] = 1.0032396772504224
+    kappas['ZZ_550'] = 1.004624907009377
+    kappas['ZZ'] = 0.9925701786469326
+    kappas['WW'] = 0.9925701786469326
+    kappas['lam'] = 2.003326933459748
+    kappas['gamgam'] = 0.9506442575856744
+    kappas['Zgam'] = 0.9816896759319687
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240'])/(kappas['ZZ_240'] - 1) = 0.6329935298491872
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240']) = 0.004151209212171381
+    Mw = 80.3668190104635
+    sin2thetaEff = 0.2314412660974903
+    GammaZ = 2.494754604553479
+    # Best scan point row: 8842 out of 14050
+
+if BP == "BP_3":
+
+    # Finding benchmark point BP_3, with constraints:
+    # min_lambda = 2.0
+    # max_lambda = inf
+    # max_delta_SingleHiggs = 0.05
+    # max_delta_gamgam = 0.05
+    # absolute_delta_kz = True
+    # maximize_delta_kz = False
+
+    kappas['uu'] = 0.989299511791139
+    kappas['dd'] = 0.989299511791139
+    kappas['ss'] = 0.989299511791139
+    kappas['cc'] = 0.989299511791139
+    kappas['bb'] = 0.989299511791139
+    kappas['tt'] = 0.989299511791139
+    kappas['ee'] = 0.989299511791139
+    kappas['mumu'] = 0.989299511791139
+    kappas['tautau'] = 0.989299511791139
+    kappas['ZZ_0'] = 1.0002280615561772
+    kappas['ZZ_240'] = 1.0065580594688865
+    kappas['ZZ_365'] = 1.0024068502567152
+    kappas['ZZ_500'] = 1.0032396772504224
+    kappas['ZZ_550'] = 1.004624907009377
+    kappas['ZZ'] = 0.9925701786469326
+    kappas['WW'] = 0.9925701786469326
+    kappas['lam'] = 2.003326933459748
+    kappas['gamgam'] = 0.9506442575856744
+    kappas['Zgam'] = 0.9816896759319687
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240'])/(kappas['ZZ_240'] - 1) = 0.6329935298491872
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240']) = 0.004151209212171381
+    Mw = 80.3668190104635
+    sin2thetaEff = 0.2314412660974903
+    GammaZ = 2.494754604553479
+    # Best scan point row: 8842 out of 14050
+
+if BP == "BP_4":
+
+    # Finding benchmark point BP_4, with constraints:
+    # min_lambda = 1.5
+    # max_lambda = inf
+    # max_delta_SingleHiggs = 0.05
+    # max_delta_gamgam = 0.05
+    # absolute_delta_kz = False
+    # maximize_delta_kz = False
+
+    kappas['uu'] = 0.9922066823296164
+    kappas['dd'] = 0.9922066823296164
+    kappas['ss'] = 0.9922066823296164
+    kappas['cc'] = 0.9922066823296164
+    kappas['bb'] = 0.9922066823296164
+    kappas['tt'] = 0.9922066823296164
+    kappas['ee'] = 0.9922066823296164
+    kappas['mumu'] = 0.9922066823296164
+    kappas['tautau'] = 0.9922066823296164
+    kappas['ZZ_0'] = 0.9995440099827713
+    kappas['ZZ_240'] = 1.0033105386486372
+    kappas['ZZ_365'] = 1.002154474320703
+    kappas['ZZ_500'] = 1.004902605630624
+    kappas['ZZ_550'] = 1.006775403556579
+    kappas['ZZ'] = 0.9952035995782093
+    kappas['WW'] = 0.9952035995782093
+    kappas['lam'] = 1.5027312712751126
+    kappas['gamgam'] = 0.9511673913600965
+    kappas['Zgam'] = 0.9818672684619811
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240'])/(kappas['ZZ_240'] - 1) = 0.34920731960345985
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240']) = 0.0011560643279342475
+    Mw = 80.35935286139284
+    sin2thetaEff = 0.2314822952404524
+    GammaZ = 2.494346193565529
+    # Best scan point row: 7316 out of 14050
+
+if BP == "BP_5":
+
+    # Finding benchmark point BP_5, with constraints:
+    # min_lambda = 1.5
+    # max_lambda = inf
+    # max_delta_SingleHiggs = 0.05
+    # max_delta_gamgam = 0.05
+    # absolute_delta_kz = True
+    # maximize_delta_kz = False
+
+    kappas['uu'] = 0.9922066823296164
+    kappas['dd'] = 0.9922066823296164
+    kappas['ss'] = 0.9922066823296164
+    kappas['cc'] = 0.9922066823296164
+    kappas['bb'] = 0.9922066823296164
+    kappas['tt'] = 0.9922066823296164
+    kappas['ee'] = 0.9922066823296164
+    kappas['mumu'] = 0.9922066823296164
+    kappas['tautau'] = 0.9922066823296164
+    kappas['ZZ_0'] = 0.9995440099827713
+    kappas['ZZ_240'] = 1.0033105386486372
+    kappas['ZZ_365'] = 1.002154474320703
+    kappas['ZZ_500'] = 1.004902605630624
+    kappas['ZZ_550'] = 1.006775403556579
+    kappas['ZZ'] = 0.9952035995782093
+    kappas['WW'] = 0.9952035995782093
+    kappas['lam'] = 1.5027312712751126
+    kappas['gamgam'] = 0.9511673913600965
+    kappas['Zgam'] = 0.9818672684619811
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240'])/(kappas['ZZ_240'] - 1) = 0.34920731960345985
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240']) = 0.0011560643279342475
+    Mw = 80.35935286139284
+    sin2thetaEff = 0.2314822952404524
+    GammaZ = 2.494346193565529
+    # Best scan point row: 7316 out of 14050
+
+if BP == "BP_6":
+
+    # Finding benchmark point BP_6, with constraints:
+    # min_lambda = -1.0
+    # max_lambda = 1.21
+    # max_delta_SingleHiggs = 0.01
+    # max_delta_gamgam = 0.02
+    # absolute_delta_kz = False
+    # maximize_delta_kz = True
+
+    kappas['uu'] = 0.9978323657528287
+    kappas['dd'] = 0.9978323657528287
+    kappas['ss'] = 0.9978323657528287
+    kappas['cc'] = 0.9978323657528287
+    kappas['bb'] = 0.9978323657528287
+    kappas['tt'] = 0.9978323657528287
+    kappas['ee'] = 0.9978323657528287
+    kappas['mumu'] = 0.9978323657528287
+    kappas['tautau'] = 0.9978323657528287
+    kappas['ZZ_0'] = 0.9989074954614838
+    kappas['ZZ_240'] = 0.9999996031219985
+    kappas['ZZ_365'] = 0.9990889923416056
+    kappas['ZZ_500'] = 0.9989275368970878
+    kappas['ZZ_550'] = 0.9989456807488839
+    kappas['ZZ'] = 0.9974486740906632
+    kappas['WW'] = 0.9974486740906632
+    kappas['lam'] = 1.186487087345143
+    kappas['gamgam'] = 0.9901556377306285
+    kappas['Zgam'] = 0.9963555931330301
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240'])/(kappas['ZZ_240'] - 1) = 2294.4350078268308
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240']) = 0.0009106107803928953
+    Mw = 80.38104920223586
+    sin2thetaEff = 0.2313970261227002
+    GammaZ = 2.4956694257811467
+    # Best scan point row: 5562 out of 14050
+
+if BP == "BP_7":
+
+    # Finding benchmark point BP_7, with constraints:
+    # min_lambda = -1.0
+    # max_lambda = 1.21
+    # max_delta_SingleHiggs = 0.01
+    # max_delta_gamgam = 0.02
+    # absolute_delta_kz = True
+    # maximize_delta_kz = True
+
+    kappas['uu'] = 0.9977913809334535
+    kappas['dd'] = 0.9977913809334535
+    kappas['ss'] = 0.9977913809334535
+    kappas['cc'] = 0.9977913809334535
+    kappas['bb'] = 0.9977913809334535
+    kappas['tt'] = 0.9977913809334535
+    kappas['ee'] = 0.9977913809334535
+    kappas['mumu'] = 0.9977913809334535
+    kappas['tautau'] = 0.9977913809334535
+    kappas['ZZ_0'] = 0.9991459359567888
+    kappas['ZZ_240'] = 1.0003413776807617
+    kappas['ZZ_365'] = 0.9992744901911946
+    kappas['ZZ_500'] = 0.9990253374763355
+    kappas['ZZ_550'] = 0.9990148782978254
+    kappas['ZZ'] = 0.9976893468388027
+    kappas['WW'] = 0.9976893468388027
+    kappas['lam'] = 1.2096708258013975
+    kappas['gamgam'] = 0.9907353484177382
+    kappas['Zgam'] = 0.9965703869084765
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240'])/(kappas['ZZ_240'] - 1) = 3.1252408979596185
+    # abs(kappas['ZZ_365'] - kappas['ZZ_240']) = 0.00106688748956707
+    Mw = 80.38143366266203
+    sin2thetaEff = 0.2313950375810892
+    GammaZ = 2.4956912542658984
+    # Best scan point row: 878 out of 14050

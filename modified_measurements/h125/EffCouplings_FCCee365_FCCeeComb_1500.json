@@ -1,0 +1,272 @@
+{
+    "id": 190503764,
+    "reference": "1905.03764",
+    "source": "Tab. 5, Fig. 14",
+    "citeKey": "deBlas:2019rxi",
+    "collider": "FCCee365",
+    "experiment": "FCCeeComb",
+    "luminosity": 1500,
+    "referenceMass": 125.38,
+    "referenceModel": "SMHiggsEW",
+    "massResolution": 18.75,
+    "subMeasurements": {
+        "effWW": {
+            "coupling": "effWW",
+            "obsCoupling": [
+                0.993110032379,
+                0.997210032379,
+                1.001310032379
+            ],
+            "process": {
+                "channels": [
+                    [
+                        "eeHZ",
+                        "WW"
+                    ],
+                    [
+                        "eeHnunu",
+                        "WW"
+                    ]
+                ]
+            }
+        },
+        "effZZ": {
+            "coupling": "effZZ",
+            "obsCoupling": [
+                0.9955100323789999,
+                0.997210032379,
+                0.998910032379
+            ],
+            "process": {
+                "channels": [
+                    [
+                        "eeHZ",
+                        "ZZ"
+                    ],
+                    [
+                        "eeHnunu",
+                        "ZZ"
+                    ]
+                ]
+            }
+        },
+        "effgg": {
+            "coupling": "effgg",
+            "obsCoupling": [
+                0.988210032379,
+                0.997210032379,
+                1.006210032379
+            ],
+            "process": {
+                "channels": [
+                    [
+                        "eeHZ",
+                        "gg"
+                    ],
+                    [
+                        "eeHnunu",
+                        "gg"
+                    ]
+                ]
+            }
+        },
+        "effgamgam": {
+            "coupling": "effgamgam",
+            "obsCoupling": [
+                0.984210032379,
+                0.997210032379,
+                1.010210032379
+            ],
+            "process": {
+                "channels": [
+                    [
+                        "eeHZ",
+                        "gamgam"
+                    ],
+                    [
+                        "eeHnunu",
+                        "gamgam"
+                    ]
+                ]
+            }
+        },
+        "effZgam": {
+            "coupling": "effZgam",
+            "obsCoupling": [
+                0.897210032379,
+                0.997210032379,
+                1.097210032379
+            ],
+            "process": {
+                "channels": [
+                    [
+                        "eeHZ",
+                        "Zgam"
+                    ],
+                    [
+                        "eeHnunu",
+                        "Zgam"
+                    ]
+                ]
+            }
+        },
+        "effcc": {
+            "coupling": "effcc",
+            "obsCoupling": [
+                0.984210032379,
+                0.997210032379,
+                1.010210032379
+            ],
+            "process": {
+                "channels": [
+                    [
+                        "eeHZ",
+                        "cc"
+                    ],
+                    [
+                        "eeHnunu",
+                        "cc"
+                    ]
+                ]
+            }
+        },
+        "efftt": {
+            "coupling": "efftt",
+            "obsCoupling": [
+                0.9662100323789999,
+                0.997210032379,
+                1.028210032379
+            ],
+            "process": {
+                "channels": [
+                    [
+                        "eeHZ",
+                        "bb"
+                    ],
+                    [
+                        "eeHnunu",
+                        "bb"
+                    ]
+                ]
+            }
+        },
+        "effbb": {
+            "coupling": "effbb",
+            "obsCoupling": [
+                0.990810032379,
+                0.997210032379,
+                1.003610032379
+            ],
+            "process": {
+                "channels": [
+                    [
+                        "eeHZ",
+                        "bb"
+                    ],
+                    [
+                        "eeHnunu",
+                        "bb"
+                    ]
+                ]
+            }
+        },
+        "effmumu": {
+            "coupling": "effmumu",
+            "obsCoupling": [
+                0.9582100323789999,
+                0.997210032379,
+                1.036210032379
+            ],
+            "process": {
+                "channels": [
+                    [
+                        "eeHZ",
+                        "mumu"
+                    ],
+                    [
+                        "eeHnunu",
+                        "mumu"
+                    ]
+                ]
+            }
+        },
+        "efftautau": {
+            "coupling": "efftautau",
+            "obsCoupling": [
+                0.9906100323789999,
+                0.997210032379,
+                1.003810032379
+            ],
+            "process": {
+                "channels": [
+                    [
+                        "eeHZ",
+                        "tautau"
+                    ],
+                    [
+                        "eeHnunu",
+                        "tautau"
+                    ]
+                ]
+            }
+        }
+    },
+    "correlations": {
+        "experimental": {
+            "effWW": {
+                "effZZ": 0.33,
+                "effgg": 0.4,
+                "effgamgam": 0.07,
+                "effZgam": 0.16,
+                "effcc": 0.33,
+                "efftt": 0.54,
+                "effbb": 0.04,
+                "effmumu": 0.53,
+                "efftautau": 0.04
+            },
+            "effZZ": {
+                "effgg": 0.11,
+                "effZgam": 0.29,
+                "effcc": 0.07,
+                "efftt": 0.04,
+                "effmumu": 0.04,
+                "efftautau": 0.04
+            },
+            "effgg": {
+                "effgamgam": 0.07,
+                "effZgam": 0.07,
+                "effcc": 0.29,
+                "efftt": 0.56,
+                "effbb": 0.04,
+                "effmumu": 0.53
+            },
+            "effgamgam": {
+                "effcc": 0.07,
+                "efftt": 0.14,
+                "effmumu": 0.13
+            },
+            "effZgam": {
+                "effcc": 0.07,
+                "efftt": 0.2,
+                "effmumu": 0.18,
+                "efftautau": -0.04
+            },
+            "effcc": {
+                "efftt": 0.44,
+                "effbb": 0.04,
+                "effmumu": 0.4
+            },
+            "efftt": {
+                "effbb": 0.07,
+                "effmumu": 0.76,
+                "efftautau": 0.04
+            },
+            "effbb": {
+                "effmumu": 0.07
+            },
+            "effmumu": {
+                "efftautau": 0.04
+            }
+        }
+    }
+}
