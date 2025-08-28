@@ -101,6 +101,7 @@ def plot_EffZZH_240_vs_365(data_file,
                            upper_right_text=None,
                            figsize=(4.5, 4.0),
                            legend_loc="upper left",
+                           max_num_bulk_points=None,
                            ):
     """
     Function to creates the 2D plot in the (k_Zh^240, k_Zh^365) plane, given a set of model points
@@ -158,8 +159,10 @@ def plot_EffZZH_240_vs_365(data_file,
         Size of the created figure. Default is (4.5, 4.0)
     legend_loc : str, optional
         Location of the legend for the plot. Default is "upper left"
+    max_num_bulk_points : int, optional
+        Maximum number of bulk points to read and plot. If set to None (default), 
+        all points in the data file are considered.
 
-    
     Returns
     -------
     fig : matplotlib.figure.Figure
@@ -181,6 +184,9 @@ def plot_EffZZH_240_vs_365(data_file,
         df = pd.read_csv(data_file + ".csv")
         df = df.replace("", np.nan)
         df = df.dropna().reset_index(drop=True)
+
+        if max_num_bulk_points is not None:
+            df = df[:max_num_bulk_points]
         n_pts = df.shape[0]
         n_pts_total = n_pts
 

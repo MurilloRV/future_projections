@@ -87,6 +87,21 @@ C1_hepfit = {
     500: 0.00099
 }
 
+# Updated values evaluated by Henning
+C1_hepfit_henning_updated = {
+    240: 0.0173658, 
+    350: 0.00573489, 
+    365: 0.00495767, 
+    500: 0.00101293,
+}
+
+C1_decay_rates = {
+    "WW" : 0.0073,
+    "ZZ" : 0.0083,
+    "gg" : 0.0066,
+    "gamgam" : 0.0049
+}
+
 # Function to evaluate the vertex correction to sigma_Zh proportional to (klam-1)
 @np.vectorize
 def effZZh1Lkala_HEPfit_C1_values(lmdb, sqrt_s, C1_values=C1_hepfit):
