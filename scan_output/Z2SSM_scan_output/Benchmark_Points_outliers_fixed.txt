@@ -2,6 +2,7 @@
 elif BP == "BPBnew_0":
     kappas['lam'] = 1.0643594459030925
     kappas['kappaSingleHiggs'] = 0.997795157109014
+    kappas['lam1L'] = 1.0163047292403735
     kappas['uu'] = 0.997795157109014
     kappas['dd'] = 0.997795157109014
     kappas['ss'] = 0.997795157109014
@@ -57,6 +58,7 @@ elif BP == "BPBnew_0":
 elif BP == "BPBnew_1":
     kappas['lam'] = 2.068362744578383
     kappas['kappaSingleHiggs'] = 0.9929873927786936
+    kappas['lam1L'] = 1.7062047495440402
     kappas['uu'] = 0.9929873927786936
     kappas['dd'] = 0.9929873927786936
     kappas['ss'] = 0.9929873927786936
@@ -112,6 +114,7 @@ elif BP == "BPBnew_1":
 elif BP == "BPBnew_2":
     kappas['lam'] = 3.41660475844658
     kappas['kappaSingleHiggs'] = 0.989084904009899
+    kappas['lam1L'] = 2.5080254466112333
     kappas['uu'] = 0.989084904009899
     kappas['dd'] = 0.989084904009899
     kappas['ss'] = 0.989084904009899
@@ -167,6 +170,7 @@ elif BP == "BPBnew_2":
 elif BP == "BPBnew_3":
     kappas['lam'] = 0.9197317035823376
     kappas['kappaSingleHiggs'] = 0.9999903148002915
+    kappas['lam1L'] = 0.9039188316498036
     kappas['uu'] = 0.9999903148002915
     kappas['dd'] = 0.9999903148002915
     kappas['ss'] = 0.9999903148002915
@@ -222,6 +226,7 @@ elif BP == "BPBnew_3":
 elif BP == "BPBnew_4":
     kappas['lam'] = 4.996504503173265
     kappas['kappaSingleHiggs'] = 0.9855862784130798
+    kappas['lam1L'] = 3.3346734140060854
     kappas['uu'] = 0.9855862784130798
     kappas['dd'] = 0.9855862784130798
     kappas['ss'] = 0.9855862784130798
@@ -277,6 +282,7 @@ elif BP == "BPBnew_4":
 elif BP == "BPBnew_5":
     kappas['lam'] = 2.723103795696014
     kappas['kappaSingleHiggs'] = 0.9953205471193108
+    kappas['lam1L'] = 1.824117680395864
     kappas['uu'] = 0.9953205471193108
     kappas['dd'] = 0.9953205471193108
     kappas['ss'] = 0.9953205471193108
@@ -332,6 +338,7 @@ elif BP == "BPBnew_5":
 elif BP == "BPBnew_6":
     kappas['lam'] = 6.114019817191308
     kappas['kappaSingleHiggs'] = 0.9833984190189476
+    kappas['lam1L'] = 3.8686891648430426
     kappas['uu'] = 0.9833984190189476
     kappas['dd'] = 0.9833984190189476
     kappas['ss'] = 0.9833984190189476
@@ -387,6 +394,7 @@ elif BP == "BPBnew_6":
 elif BP == "BPBnew_7":
     kappas['lam'] = 4.878015572616551
     kappas['kappaSingleHiggs'] = 0.98996618183163
+    kappas['lam1L'] = 2.9200538244698144
     kappas['uu'] = 0.98996618183163
     kappas['dd'] = 0.98996618183163
     kappas['ss'] = 0.98996618183163
@@ -442,6 +450,7 @@ elif BP == "BPBnew_7":
 elif BP == "BPBnew_8":
     kappas['lam'] = 7.24831645311373
     kappas['kappaSingleHiggs'] = 0.9813387077797447
+    kappas['lam1L'] = 4.413812747631958
     kappas['uu'] = 0.9813387077797447
     kappas['dd'] = 0.9813387077797447
     kappas['ss'] = 0.9813387077797447
@@ -497,6 +506,7 @@ elif BP == "BPBnew_8":
 elif BP == "BPBnew_9":
     kappas['lam'] = 7.005268951781772
     kappas['kappaSingleHiggs'] = 0.9845763293696326
+    kappas['lam1L'] = 4.028931096630989
     kappas['uu'] = 0.9845763293696326
     kappas['dd'] = 0.9845763293696326
     kappas['ss'] = 0.9845763293696326
@@ -552,6 +562,7 @@ elif BP == "BPBnew_9":
 elif BP == "BPBnew_10":
     kappas['lam'] = 8.535635929341407
     kappas['kappaSingleHiggs'] = 0.9791890510548172
+    kappas['lam1L'] = 4.987738770945345
     kappas['uu'] = 0.9791890510548172
     kappas['dd'] = 0.9791890510548172
     kappas['ss'] = 0.9791890510548172
@@ -607,6 +618,7 @@ elif BP == "BPBnew_10":
 elif BP == "BPBnew_11":
     kappas['lam'] = 8.84021000223677
     kappas['kappaSingleHiggs'] = 0.98016935808828
+    kappas['lam1L'] = 4.976927802452023
     kappas['uu'] = 0.98016935808828
     kappas['dd'] = 0.98016935808828
     kappas['ss'] = 0.98016935808828
@@ -662,6 +674,7 @@ elif BP == "BPBnew_11":
 elif BP == "BPBnew_12":
     kappas['lam'] = 9.584476423981522
     kappas['kappaSingleHiggs'] = 0.9775885324481944
+    kappas['lam1L'] = 5.451304727293613
     kappas['uu'] = 0.9775885324481944
     kappas['dd'] = 0.9775885324481944
     kappas['ss'] = 0.9775885324481944
@@ -717,6 +730,7 @@ elif BP == "BPBnew_12":
 elif BP == "BPBnew_13":
     kappas['lam'] = 10.34814810189343
     kappas['kappaSingleHiggs'] = 0.9763251458223264
+    kappas['lam1L'] = 5.7864902366438695
     kappas['uu'] = 0.9763251458223264
     kappas['dd'] = 0.9763251458223264
     kappas['ss'] = 0.9763251458223264
