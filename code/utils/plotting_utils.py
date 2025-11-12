@@ -260,8 +260,8 @@ def plot_EffZZH_240_vs_365(data_file,
         raise ValueError("Input must be a string or a list of strings.")
     
 
-    ax.set_xlabel(r'$\kappa_{Zh}^{365} - 1$')
-    ax.set_ylabel(r'$\kappa_{Zh}^{240} - 1$')
+    ax.set_xlabel(r'$\kappa_{Zh}^{365} - 1$', fontsize=14)
+    ax.set_ylabel(r'$\kappa_{Zh}^{240} - 1$', fontsize=14)
 
     lower_text = model_name
     if BR_constraints:
