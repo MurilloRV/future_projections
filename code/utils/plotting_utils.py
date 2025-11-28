@@ -13,12 +13,147 @@ plt.rcParams['savefig.dpi'] = 600
 plt.rcParams['text.usetex'] = False
 
 from scipy import interpolate
-import scipy.stats 
+# import scipy.stats 
 import matplotlib as mpl
 from matplotlib.colors import LinearSegmentedColormap, ListedColormap
 from matplotlib.ticker import MultipleLocator
 from matplotlib.lines import Line2D
 from matplotlib.colors import Normalize
+
+
+
+def scatter_plot_2D(
+    x_data,
+    y_data,
+    color_data,
+    x_label={'label':'', 'fontsize':10},
+    y_label={'label':'', 'fontsize':10},
+    figsize=(4.5, 4.0),
+    color_map=mpl.colormaps['tab20c'],
+    plot_colorbar=True,
+    colorbar_label='',
+    upper_right_text='',
+    x_range=None,
+    y_range=None,
+    **scatter_kwargs
+):
+    """
+    Generic function to create a 2D scatter plot with color coding
+
+    Parameters
+    ----------
+    x_data : array-like
+        Data for the x-axis.
+    y_data : array-like
+        Data for the y-axis.
+    color_data : array-like
+        Data for color coding the points.
+    x_label : dict, optional
+        Dictionary with keys 'label' and 'fontsize' for the x-axis label.
+    y_label : dict, optional
+        Dictionary with keys 'label' and 'fontsize' for the y-axis label.
+    figsize : tuple, optional
+        Figure size.
+    color_map : matplotlib colormap, optional
+        Colormap for the scatter plot.
+    x_range : tuple, optional
+        Range for the x-axis.
+    y_range : tuple, optional
+        Range for the y-axis.
+
+    Returns
+    -------
+    fig : matplotlib.figure.Figure
+        The figure object.
+    ax : matplotlib.axes.Axes
+        The axes object.
+
+    """
+
+    fig, ax = plt.subplots(
+        figsize=figsize,
+        constrained_layout=True
+    )
+
+    sc = ax.scatter(
+        x_data,
+        y_data,
+        c=color_data,
+        cmap=color_map,
+        rasterized=True,
+        **scatter_kwargs,
+    )
+
+    if x_range is not None: ax.set_xlim(*x_range)
+    if y_range is not None: ax.set_ylim(*y_range)
+
+    # Check if colorbar has been plotted already
+    if plot_colorbar:
+        clb = fig.colorbar(
+            sc,
+            ax=ax,
+            label=colorbar_label,
+            pad=0,
+            fraction=0.1,
+            location='right',
+            aspect=40,
+            extend='max',
+        )
+        clb.ax.minorticks_on()
+
+    ax.set_xlabel(x_label['label'], fontsize=x_label['fontsize'])
+    ax.set_ylabel(y_label['label'], fontsize=y_label['fontsize'])
+
+    ax.text(
+        1,
+        1,
+        upper_right_text,
+        horizontalalignment="right",
+        verticalalignment="bottom",
+        transform=ax.transAxes,
+        fontsize=9,
+    )
+
+    # plt.tight_layout()
+
+    return fig, ax
+
+
+
+def read_data_files(
+    data_file,
+    func_read_file,
+    func_read_file_args={},
+    BR_constraints=None,
+    max_num_bulk_points=None,
+):
+    print(f"Processing data file: {data_file}")
+    df = pd.read_csv(data_file + ".csv")
+    df = df.replace("", np.nan)
+    df = df.dropna().reset_index(drop=True)
+
+    if max_num_bulk_points is not None:
+        df = df[:max_num_bulk_points]
+    n_pts = df.shape[0]
+
+    kappas, EWPOs, model_pars = func_read_file(df, **func_read_file_args)
+
+    if not BR_constraints is None:
+        satisfy_BR_constraint = [True for i in range(n_pts)]
+        for i in range(n_pts):
+            for coup in ['uu', 'dd', 'cc', 'ss', 'tt', 'bb', 'ee', 'mumu', 'tautau', 'WW', 'ZZ', 'Zgam', 'gamgam']:
+                if np.abs(kappas[coup][i] - 1.) > BR_constraints:
+                    satisfy_BR_constraint[i] = False
+
+        for coup in kappas.keys():
+            kappas[coup] = np.array(kappas[coup][satisfy_BR_constraint])
+
+        n_pts_BR_constraint = len(kappas['ZZ'])
+        print(f"Number of points satisfying the {BR_constraints*100:.3g}% SM constraint on the single higgs couplings: {n_pts_BR_constraint} / {n_pts}")
+    else:
+        n_pts_BR_constraint = n_pts
+
+    return kappas, EWPOs, model_pars, n_pts, n_pts_BR_constraint
 
 
 
@@ -180,32 +315,42 @@ def plot_EffZZH_240_vs_365(data_file,
     plot_colorbar = True
 
     if isinstance(data_file, str):
-        print(f"Processing data file: {data_file}")
-        df = pd.read_csv(data_file + ".csv")
-        df = df.replace("", np.nan)
-        df = df.dropna().reset_index(drop=True)
+        # print(f"Processing data file: {data_file}")
+        # df = pd.read_csv(data_file + ".csv")
+        # df = df.replace("", np.nan)
+        # df = df.dropna().reset_index(drop=True)
 
-        if max_num_bulk_points is not None:
-            df = df[:max_num_bulk_points]
-        n_pts = df.shape[0]
+        # if max_num_bulk_points is not None:
+        #     df = df[:max_num_bulk_points]
+        # n_pts = df.shape[0]
+        # n_pts_total = n_pts
+
+        # kappas, _ , _ = func_read_file(df, **func_read_file_args)
+
+        # if not BR_constraints is None:
+        #     satisfy_BR_constraint = [True for i in range(n_pts)]
+        #     for i in range(n_pts):
+        #         for coup in ['uu', 'dd', 'cc', 'ss', 'tt', 'bb', 'ee', 'mumu', 'tautau', 'WW', 'ZZ', 'Zgam', 'gamgam']:
+        #             if np.abs(kappas[coup][i] - 1.) > BR_constraints:
+        #                 satisfy_BR_constraint[i] = False
+
+        #     for coup in kappas.keys():
+        #         kappas[coup] = np.array(kappas[coup][satisfy_BR_constraint])
+
+        #     n_pts_BR_constraint = len(kappas['ZZ'])
+        #     print(f"Number of points satisfying the {BR_constraints*100:.3g}% SM constraint on the single higgs couplings: {n_pts_BR_constraint} / {n_pts}")
+
+        #     n_pts_BR_constraint_total =  n_pts_BR_constraint
+
+        kappas, EWPOs, model_pars, n_pts, n_pts_BR_constraint = read_data_files(
+            data_file,
+            func_read_file,
+            func_read_file_args={},
+            BR_constraints=None,
+            max_num_bulk_points=None,
+        )
+        n_pts_BR_constraint_total = n_pts_BR_constraint
         n_pts_total = n_pts
-
-        kappas, _ , _ = func_read_file(df, **func_read_file_args)
-
-        if not BR_constraints is None:
-            satisfy_BR_constraint = [True for i in range(n_pts)]
-            for i in range(n_pts):
-                for coup in ['uu', 'dd', 'cc', 'ss', 'tt', 'bb', 'ee', 'mumu', 'tautau', 'WW', 'ZZ', 'Zgam', 'gamgam']:
-                    if np.abs(kappas[coup][i] - 1.) > BR_constraints:
-                        satisfy_BR_constraint[i] = False
-
-            for coup in kappas.keys():
-                kappas[coup] = np.array(kappas[coup][satisfy_BR_constraint])
-
-            n_pts_BR_constraint = len(kappas['ZZ'])
-            print(f"Number of points satisfying the {BR_constraints*100:.3g}% SM constraint on the single higgs couplings: {n_pts_BR_constraint} / {n_pts}")
-
-            n_pts_BR_constraint_total =  n_pts_BR_constraint
 
         generate_plot(fig=fig,
                       ax=ax,
@@ -218,34 +363,44 @@ def plot_EffZZH_240_vs_365(data_file,
 
     elif isinstance(data_file, list) and all(isinstance(item, str) for item in data_file):
         print(f"Processing data files: {data_file}")
-        n_pts = 0
+        # n_pts = 0
         n_pts_total = 0
-        if not BR_constraints is None:
-            n_pts_BR_constraint_total = 0
+        # if not BR_constraints is None:
+        n_pts_BR_constraint_total = 0
 
         for file in data_file:
-            df = pd.read_csv(file + ".csv")
-            df = df.replace("", np.nan)
-            df = df.dropna().reset_index(drop=True)
-            n_pts = df.shape[0]
-            n_pts_total = n_pts_total + n_pts
+        #     df = pd.read_csv(file + ".csv")
+        #     df = df.replace("", np.nan)
+        #     df = df.dropna().reset_index(drop=True)
+        #     n_pts = df.shape[0]
+        #     n_pts_total = n_pts_total + n_pts
 
-            kappas, _, _ = func_read_file(df, **func_read_file_args)
+        #     kappas, _, _ = func_read_file(df, **func_read_file_args)
 
-            if not BR_constraints is None:
-                satisfy_BR_constraint = [True for i in range(n_pts)]
-                for i in range(n_pts):
-                    for coup in ['uu', 'dd', 'cc', 'ss', 'tt', 'bb', 'ee', 'mumu', 'tautau', 'WW', 'ZZ', 'Zgam', 'gamgam']:
-                        if np.abs(kappas[coup][i] - 1.) > BR_constraints:
-                            satisfy_BR_constraint[i] = False
+        #     if not BR_constraints is None:
+        #         satisfy_BR_constraint = [True for i in range(n_pts)]
+        #         for i in range(n_pts):
+        #             for coup in ['uu', 'dd', 'cc', 'ss', 'tt', 'bb', 'ee', 'mumu', 'tautau', 'WW', 'ZZ', 'Zgam', 'gamgam']:
+        #                 if np.abs(kappas[coup][i] - 1.) > BR_constraints:
+        #                     satisfy_BR_constraint[i] = False
 
-                for coup in kappas.keys():
-                    kappas[coup] = np.array(kappas[coup][satisfy_BR_constraint])
+        #         for coup in kappas.keys():
+        #             kappas[coup] = np.array(kappas[coup][satisfy_BR_constraint])
 
-                n_pts_BR_constraint = len(kappas['ZZ'])
-                print(f"Number of points satisfying the {BR_constraints*100:.3g}% SM constraint on the single higgs couplings: {n_pts_BR_constraint} / {n_pts}")
+        #         n_pts_BR_constraint = len(kappas['ZZ'])
+        #         print(f"Number of points satisfying the {BR_constraints*100:.3g}% SM constraint on the single higgs couplings: {n_pts_BR_constraint} / {n_pts}")
 
-                n_pts_BR_constraint_total = n_pts_BR_constraint_total + n_pts_BR_constraint
+        #         n_pts_BR_constraint_total = n_pts_BR_constraint_total + n_pts_BR_constraint
+
+            kappas, EWPOs, model_pars, n_pts, n_pts_BR_constraint = read_data_files(
+                file,
+                func_read_file,
+                func_read_file_args={},
+                BR_constraints=None,
+                max_num_bulk_points=None,
+            )
+            n_pts_BR_constraint_total += n_pts_BR_constraint
+            n_pts_total += n_pts
 
             plot_colorbar = generate_plot(fig=fig,
                                           ax=ax,
