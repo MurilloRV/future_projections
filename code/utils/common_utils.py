@@ -1,8 +1,19 @@
-import pandas as pd
 import numpy as np
-import os
 import subprocess
 from pyCollier import db0
+
+import yaml
+# Add support for numpy data types in yaml
+yaml.SafeDumper.add_multi_representer(
+    np.generic,
+    lambda dumper, data: dumper.represent_data(data.item())
+)
+
+yaml.SafeDumper.add_representer(
+    np.ndarray,
+    lambda dumper, data: dumper.represent_data(data.tolist())
+)
+
 
 # Johannes' formulas
 Mh = 125.1
@@ -209,18 +220,79 @@ def print_to_file(message, file):
     print(message, file=file)
 
 
+def save_BP_yaml_file(
+    BP_yaml_output_dir,
+    BP_kappas,
+    BP_EWPOs,
+    BP_model_pars, 
+    BP_name,
+    end_comment=None,
+):
+    """
+    Save benchmark point predictions to a YAML file.
+
+    Parameters
+    ----------
+    BP_yaml_output_dir : str
+        Directory where to store the predictions obtain for each benchmark point. If None,
+        no files are created. If a directory is given, files named <BP_name>.yaml are created
+    BP_kappas : dict
+        Dictionary containing the results the coupling modifiers, for the benchmark point found. 
+        The dictionary keys are the coupling names, and predictions are stored in the dictionary
+        values.
+    BP_EWPOs : dict
+        Results for the Electroweak Precision Observables for the benchmark point.
+    BP_model_pars : dict
+        Results for the model parameters for the benchmark point.
+    BP_name : str
+        Name of the benchmark point (used as the filename for the YAML output).
+    end_comment : str, optional
+        Optional comment to be added at the end of the YAML file, e.g. indicating the row of the
+        benchmark point in the original scan data csv file.
+
+    Returns
+    -------
+    None
+
+    """
+    
+    subprocess.run(["mkdir", "-p", BP_yaml_output_dir])
+
+    with open(BP_yaml_output_dir + f"{BP_name}.yaml", 'w') as BP_file:
+        print_to_file(f"# Benchmark point: {BP_name}\n", file=BP_file)
+        
+        BP_data = {
+            "kappas": BP_kappas,
+            "EWPOs": BP_EWPOs,
+        }
+
+        yaml.safe_dump(
+            BP_data,
+            BP_file,
+            sort_keys=False,           # keep insertion order
+            default_flow_style=False,  # block style (readable)
+        )
+
+        for par_name, par_value in BP_model_pars.items():
+            print_to_file(f"# {par_name} = {par_value}", file=BP_file)
+
+        if end_comment is not None:
+            print_to_file(end_comment, file=BP_file)
+
+
 def find_benchmark(n_pts,
                    kappas,
                    EWPOs,
                    model_pars,
                    old_df_indices,
-                   BP_Names,
+                   BP_names,
                    BP_output_file,
                    max_errors_365,
                    max_errors_240,
                    delta_kappas_z_365,
                    delta_kappas_z_240,
                    BR_constraints=None,
+                   BP_yaml_output_dir=None,
                    ):
     """
     Find benchmark points for a given model. Lists of proposed (k_Zh_365 - 1) and 
@@ -242,7 +314,7 @@ def find_benchmark(n_pts,
         Dictionary containing the model parameters.
     old_df_indices : np.ndarray
         Array containing the old indices of the DataFrame.
-    BP_Names : list of str
+    BP_names : list of str
         List of benchmark point names.
     BP_output_file : file
         Output text file where the benchmark point results are written. The results 
@@ -261,17 +333,20 @@ def find_benchmark(n_pts,
     BR_constraints : float, optional
         Branching ratio constraints for BPs. Model parameter points for which the SM Higgs 
         couplings to other SM particles deviate by over BR_constraints*100% are discarded
+    BP_yaml_output_dir : str, optional
+        Directory where to store the predictions obtain for each benchmark point. If None,
+        no files are created. If a directory is given, files named <BP_name>.yaml are created
 
     Returns
     -------
-    bp_kappas : list of dict
+    BP_kappas : list of dict
         List of results for the coupling modifiers. Entries correspond to benchmark points and are dictionaries 
         with coupling names as keys and their values.
-    bp_EWPOs : list of dict
+    BP_EWPOs : list of dict
         Results for the Electroweak Precision Observables for the benchmark points.
-    bp_model_pars : list of dict
+    BP_model_pars : list of dict
         Results for the model parameters for the benchmark points.
-    bp_indices : list of int
+    BP_indices : list of int
         List of indices () where benchmark points were found.
     """
 
@@ -297,56 +372,70 @@ def find_benchmark(n_pts,
     if not len(delta_kappas_z_365) == len(delta_kappas_z_240):
         raise ValueError("delta_kappas_z_365 and delta_kappas_z_240 have different lengths!")
 
-    bp_indices = [None for i in range(len(delta_kappas_z_365))]
-    bp_kappas = [None for i in range(len(delta_kappas_z_365))]
-    bp_EWPOs = [None for i in range(len(delta_kappas_z_365))]
-    bp_model_pars = [None for i in range(len(delta_kappas_z_365))]
+    BP_indices = [None for i in range(len(delta_kappas_z_365))]
+    BP_kappas = [None for i in range(len(delta_kappas_z_365))]
+    BP_EWPOs = [None for i in range(len(delta_kappas_z_365))]
+    BP_model_pars = [None for i in range(len(delta_kappas_z_365))]
 
     for ind, (kZ_365, kZ_240) in enumerate(zip(kappas['ZZ_365'], kappas['ZZ_240'])):
         for BP, (delta_kappa_z_365, delta_kappa_z_240, max_error_365, max_error_240) in enumerate(zip(delta_kappas_z_365, delta_kappas_z_240, max_errors_365, max_errors_240)):
             if abs((kZ_365-1) - delta_kappa_z_365) < max_error_365 and abs((kZ_240-1) - delta_kappa_z_240) < max_error_240:
-                bp_indices[BP] = ind
+                BP_indices[BP] = ind
 
 
-    if any(bp_index is None for bp_index in bp_indices):
-        missing_BPs = [i for i, bp_index in enumerate(bp_indices) if bp_index is None]
+    if any(BP_index is None for BP_index in BP_indices):
+        missing_BPs = [i for i, BP_index in enumerate(BP_indices) if BP_index is None]
         raise ValueError(f"The following BPs were not found: {missing_BPs}")
 
 
-    for BP, bp_index in enumerate(bp_indices):
+    for BP, BP_index in enumerate(BP_indices):
 
-        print_to_file(f"\nelif BP == \"{BP_Names[BP]}\":", file=BP_output_file)
+        # Print python code to single output file
+        print_to_file(f"\nelif BP == \"{BP_names[BP]}\":", file=BP_output_file)
 
-        # bfp_chisq = chisq[bp_index]
-        bp_kappas[BP] = {coup:kps[bp_index] for (coup, kps) in kappas.items()}
-        bp_EWPOs[BP] = {obs_name:obs_value[bp_index] for (obs_name, obs_value) in EWPOs.items()}
-        bp_model_pars[BP] = {par_name:par_value[bp_index] for (par_name, par_value) in model_pars.items()}
+        # bfp_chisq = chisq[BP_index]
+        BP_kappas[BP] = {coup:kps[BP_index] for (coup, kps) in kappas.items()}
+        BP_EWPOs[BP] = {obs_name:obs_value[BP_index] for (obs_name, obs_value) in EWPOs.items()}
+        BP_model_pars[BP] = {par_name:par_value[BP_index] for (par_name, par_value) in model_pars.items()}
 
-        for coup, kaps in bp_kappas[BP].items():
+        for coup, kaps in BP_kappas[BP].items():
             print_to_file(f"    kappas['{coup}'] = {kaps}", file=BP_output_file)
 
-        print_to_file(f"    # abs(kappas['ZZ_365'] - kappas['ZZ_240'])/(kappas['ZZ_240'] - 1) = {np.abs((bp_kappas[BP]['ZZ_365'] - bp_kappas[BP]['ZZ_240'])/(bp_kappas[BP]['ZZ_240'] - 1))}", file=BP_output_file)
-        print_to_file(f"    # abs(kappas['ZZ_365'] - kappas['ZZ_240']) = {np.abs(bp_kappas[BP]['ZZ_365'] - bp_kappas[BP]['ZZ_240'])}", file=BP_output_file)
+        print_to_file(f"    # abs(kappas['ZZ_365'] - kappas['ZZ_240'])/(kappas['ZZ_240'] - 1) = {np.abs((BP_kappas[BP]['ZZ_365'] - BP_kappas[BP]['ZZ_240'])/(BP_kappas[BP]['ZZ_240'] - 1))}", file=BP_output_file)
+        print_to_file(f"    # abs(kappas['ZZ_365'] - kappas['ZZ_240']) = {np.abs(BP_kappas[BP]['ZZ_365'] - BP_kappas[BP]['ZZ_240'])}", file=BP_output_file)
 
-        for obs_name, obs_value in bp_EWPOs[BP].items():
+        for obs_name, obs_value in BP_EWPOs[BP].items():
             print_to_file(f"    {obs_name} = {obs_value}", file=BP_output_file)
 
-        for par_name, par_value in bp_model_pars[BP].items():
+        for par_name, par_value in BP_model_pars[BP].items():
             print_to_file(f"    # {par_name} = {par_value}", file=BP_output_file)
 
-        print_to_file(f"    # Best scan point row: {old_df_indices[bp_index]+2} out of {old_df_indices[-1]+2}", file=BP_output_file)
+        print_to_file(f"    # Best scan point row: {old_df_indices[BP_index]+2} out of {old_df_indices[-1]+2}", file=BP_output_file)
+
+
+        # Print individual output files for each BP. 
+        if not BP_yaml_output_dir is None:
+            save_BP_yaml_file(
+                BP_yaml_output_dir,
+                BP_kappas[BP],
+                BP_EWPOs[BP],
+                BP_model_pars[BP], 
+                BP_names[BP],
+                end_comment=f"# Best scan point row: {old_df_indices[BP_index]+2} out of {old_df_indices[-1]+2}",
+            )
         
-    return bp_kappas, bp_EWPOs, bp_model_pars, bp_indices
+    return BP_kappas, BP_EWPOs, BP_model_pars, BP_indices
 
 
-### FINISH DOCUMENTATION
+### TODO: FINISH DOCUMENTATION
 def find_benchmark_lambda1(n_pts,
                            kappas,
                            EWPOs,
                            model_pars,
                            old_df_indices,
-                           BP_Name,
+                           BP_name,
                            BR_constraints=None,
+                           BP_yaml_output_dir=None,
                            ):
     """
     Function to find the benchmark point that, among the data set, has kappa_lambda
@@ -366,24 +455,26 @@ def find_benchmark_lambda1(n_pts,
         Dictionary containing the model parameters.
     old_df_indices : np.ndarray
         Array containing the old indices of the DataFrame.
-    BP_Names : list of str
-        Names of the benchmark points to be found.
-
+    BP_name : str
+        Name of the benchmark point to be found.
     BR_constraints : float, optional
         Branching ratio constraints for BPs. Model parameter points for which the SM Higgs 
         couplings to other SM particles deviate by over BR_constraints*100% are discarded
+    BP_yaml_output_dir : str, optional
+        Directory where to store the predictions obtain for each benchmark point. If None,
+        no files are created. If a directory is given, files named <BP_name>.yaml are created
 
     Returns
     -------
-    bp_kappas : dict
+    BP_kappas : dict
         Dictionary containing the results the coupling modifiers, for the benchmark point found. 
         The dictionary keys are the coupling names, and predictions are stored in the dictionary
         values.
-    bp_EWPOs : dict
+    BP_EWPOs : dict
         Results for the Electroweak Precision Observables for the benchmark point.
-    bp_model_pars : dict
+    BP_model_pars : dict
         Results for the model parameters for the benchmark point.
-    bp_index : int
+    BP_index : int
         List of indices () where benchmark point was found.
     """
 
@@ -405,37 +496,47 @@ def find_benchmark_lambda1(n_pts,
 
         old_df_indices = old_df_indices[satisfy_BR_constraint]
 
-    bp_index = None
-    bp_kappas = None
-    bp_EWPOs = None
-    bp_model_pars = None
+    BP_index = None
+    BP_kappas = None
+    BP_EWPOs = None
+    BP_model_pars = None
 
     # for ind, lmbd in enumerate(kappas['lam']):
     #     if abs(lmbd-1) < max_delta_lambda:
-    #         bp_index = ind
+    #         BP_index = ind
 
-    bp_index = np.argmin(kappas['lam'])
+    BP_index = np.argmin(kappas['lam'])
 
-    if bp_index is None:
+    if BP_index is None:
         raise ValueError(f"Could not find such BP!")
 
-    print(f"\nelif BP == \"{BP_Name}\":")
+    print(f"\nelif BP == \"{BP_name}\":")
 
-    bp_kappas = {coup:kps[bp_index] for (coup, kps) in kappas.items()}
-    bp_EWPOs = {obs_name:obs_value[bp_index] for (obs_name, obs_value) in EWPOs.items()}
-    bp_model_pars = {par_name:par_value[bp_index] for (par_name, par_value) in model_pars.items()}
+    BP_kappas = {coup:kps[BP_index] for (coup, kps) in kappas.items()}
+    BP_EWPOs = {obs_name:obs_value[BP_index] for (obs_name, obs_value) in EWPOs.items()}
+    BP_model_pars = {par_name:par_value[BP_index] for (par_name, par_value) in model_pars.items()}
 
-    for coup, kaps in bp_kappas.items():
+    for coup, kaps in BP_kappas.items():
         print(f"    kappas['{coup}'] = {kaps}")
 
-    for obs_name, obs_value in bp_EWPOs.items():
+    for obs_name, obs_value in BP_EWPOs.items():
         print(f"    {obs_name} = {obs_value}")
 
-    for par_name, par_value in bp_model_pars.items():
+    for par_name, par_value in BP_model_pars.items():
         print(f"    # {par_name} = {par_value}")
 
-    print(f"    # Best scan point row: {old_df_indices[bp_index]+2} out of {old_df_indices[-1]+2}")
-
-    return bp_kappas, bp_EWPOs, bp_model_pars, bp_index
+    print(f"    # Best scan point row: {old_df_indices[BP_index]+2} out of {old_df_indices[-1]+2}")
 
 
+    # Print individual output files for each BP. 
+    if not BP_yaml_output_dir is None:
+        save_BP_yaml_file(
+            BP_yaml_output_dir,
+            BP_kappas,
+            BP_EWPOs,
+            BP_model_pars, 
+            BP_name,
+            end_comment=f"# Best scan point row: {old_df_indices[BP_index]+2} out of {old_df_indices[-1]+2}",
+        )
+
+    return BP_kappas, BP_EWPOs, BP_model_pars, BP_index

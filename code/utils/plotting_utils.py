@@ -315,39 +315,12 @@ def plot_EffZZH_240_vs_365(data_file,
     plot_colorbar = True
 
     if isinstance(data_file, str):
-        # print(f"Processing data file: {data_file}")
-        # df = pd.read_csv(data_file + ".csv")
-        # df = df.replace("", np.nan)
-        # df = df.dropna().reset_index(drop=True)
-
-        # if max_num_bulk_points is not None:
-        #     df = df[:max_num_bulk_points]
-        # n_pts = df.shape[0]
-        # n_pts_total = n_pts
-
-        # kappas, _ , _ = func_read_file(df, **func_read_file_args)
-
-        # if not BR_constraints is None:
-        #     satisfy_BR_constraint = [True for i in range(n_pts)]
-        #     for i in range(n_pts):
-        #         for coup in ['uu', 'dd', 'cc', 'ss', 'tt', 'bb', 'ee', 'mumu', 'tautau', 'WW', 'ZZ', 'Zgam', 'gamgam']:
-        #             if np.abs(kappas[coup][i] - 1.) > BR_constraints:
-        #                 satisfy_BR_constraint[i] = False
-
-        #     for coup in kappas.keys():
-        #         kappas[coup] = np.array(kappas[coup][satisfy_BR_constraint])
-
-        #     n_pts_BR_constraint = len(kappas['ZZ'])
-        #     print(f"Number of points satisfying the {BR_constraints*100:.3g}% SM constraint on the single higgs couplings: {n_pts_BR_constraint} / {n_pts}")
-
-        #     n_pts_BR_constraint_total =  n_pts_BR_constraint
-
         kappas, EWPOs, model_pars, n_pts, n_pts_BR_constraint = read_data_files(
             data_file,
             func_read_file,
-            func_read_file_args={},
-            BR_constraints=None,
-            max_num_bulk_points=None,
+            func_read_file_args=func_read_file_args,
+            BR_constraints=BR_constraints,
+            max_num_bulk_points=max_num_bulk_points,
         )
         n_pts_BR_constraint_total = n_pts_BR_constraint
         n_pts_total = n_pts
@@ -362,42 +335,17 @@ def plot_EffZZH_240_vs_365(data_file,
                       )
 
     elif isinstance(data_file, list) and all(isinstance(item, str) for item in data_file):
-        print(f"Processing data files: {data_file}")
-        # n_pts = 0
+
         n_pts_total = 0
-        # if not BR_constraints is None:
         n_pts_BR_constraint_total = 0
 
         for file in data_file:
-        #     df = pd.read_csv(file + ".csv")
-        #     df = df.replace("", np.nan)
-        #     df = df.dropna().reset_index(drop=True)
-        #     n_pts = df.shape[0]
-        #     n_pts_total = n_pts_total + n_pts
-
-        #     kappas, _, _ = func_read_file(df, **func_read_file_args)
-
-        #     if not BR_constraints is None:
-        #         satisfy_BR_constraint = [True for i in range(n_pts)]
-        #         for i in range(n_pts):
-        #             for coup in ['uu', 'dd', 'cc', 'ss', 'tt', 'bb', 'ee', 'mumu', 'tautau', 'WW', 'ZZ', 'Zgam', 'gamgam']:
-        #                 if np.abs(kappas[coup][i] - 1.) > BR_constraints:
-        #                     satisfy_BR_constraint[i] = False
-
-        #         for coup in kappas.keys():
-        #             kappas[coup] = np.array(kappas[coup][satisfy_BR_constraint])
-
-        #         n_pts_BR_constraint = len(kappas['ZZ'])
-        #         print(f"Number of points satisfying the {BR_constraints*100:.3g}% SM constraint on the single higgs couplings: {n_pts_BR_constraint} / {n_pts}")
-
-        #         n_pts_BR_constraint_total = n_pts_BR_constraint_total + n_pts_BR_constraint
-
             kappas, EWPOs, model_pars, n_pts, n_pts_BR_constraint = read_data_files(
                 file,
                 func_read_file,
-                func_read_file_args={},
-                BR_constraints=None,
-                max_num_bulk_points=None,
+                func_read_file_args=func_read_file_args,
+                BR_constraints=BR_constraints,
+                max_num_bulk_points=max_num_bulk_points,
             )
             n_pts_BR_constraint_total += n_pts_BR_constraint
             n_pts_total += n_pts
