@@ -259,7 +259,7 @@ def save_BP_yaml_file(
     subprocess.run(["mkdir", "-p", BP_yaml_output_dir])
 
     with open(BP_yaml_output_dir + f"{BP_name}.yaml", 'w') as BP_file:
-        print_to_file(f"# Benchmark point: {BP_name}\n", file=BP_file)
+        print(f"# Benchmark point: {BP_name}\n", file=BP_file)
         
         BP_data = {
             "kappas": BP_kappas,
@@ -274,10 +274,10 @@ def save_BP_yaml_file(
         )
 
         for par_name, par_value in BP_model_pars.items():
-            print_to_file(f"# {par_name} = {par_value}", file=BP_file)
+            print(f"# {par_name} = {par_value}", file=BP_file)
 
         if end_comment is not None:
-            print_to_file(end_comment, file=BP_file)
+            print(end_comment, file=BP_file)
 
 
 def find_benchmark(n_pts,
