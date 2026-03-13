@@ -540,3 +540,28 @@ def find_benchmark_lambda1(n_pts,
         )
 
     return BP_kappas, BP_EWPOs, BP_model_pars, BP_index
+
+
+from matplotlib.patches import Rectangle, Ellipse
+from matplotlib.legend_handler import HandlerPatch
+
+class HandlerRectangle(HandlerPatch):
+    def create_artists(self, legend, orig_handle,
+                       xdescent, ydescent, width, height, fontsize, trans):
+        center = 0.5 * width - 0.5 * xdescent, 0.5 * height - 0.5 * ydescent
+        lower_left = - 0.5 * xdescent, - 0.5 * ydescent
+        p = Rectangle(xy=lower_left, width=1.2*width + xdescent,
+                               height=1.2*height + ydescent)
+        self.update_prop(p, orig_handle, legend)
+        p.set_transform(trans)
+        return [p]
+    
+class HandlerEllipse(HandlerPatch):
+    def create_artists(self, legend, orig_handle,
+                       xdescent, ydescent, width, height, fontsize, trans):
+        center = 0.5 * width - 0.5 * xdescent, 0.5 * height - 0.5 * ydescent
+        p = Ellipse(xy=center, width=1.2*width + xdescent,
+                               height=1.2*height + ydescent)
+        self.update_prop(p, orig_handle, legend)
+        p.set_transform(trans)
+        return [p]

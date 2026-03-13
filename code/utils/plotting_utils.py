@@ -20,6 +20,8 @@ from matplotlib.ticker import MultipleLocator
 from matplotlib.lines import Line2D
 from matplotlib.colors import Normalize
 
+from iminuit import Minuit
+from iminuit.cost import LeastSquares
 
 
 def scatter_plot_2D(
@@ -847,7 +849,10 @@ def plot_curves (
 
     Returns
     -------
-    None
+    k_ZH_240 : dict
+        A dictionary containing the k_Zh^240 values for each curve, with the curve names as keys.
+    k_ZH_365 : dict
+        A dictionary containing the k_Zh^365 values for each curve, with the curve names as keys.
 
     Notes
     -----
@@ -1009,86 +1014,97 @@ def plot_curves (
             leg_handles = []
 
 
+    return k_ZH_240, k_ZH_365
 
 
-# def plot_curve_CH_CHbox (
-#     ax,
-#     curves, 
-#     file_names, 
-#     data_sets, 
-#     legend_locs, 
-#     legend_cols, 
-#     legend_fontsizes,
-#     markers, 
-#     color_lines, 
-#     label_lines, 
-#     markersizes, 
-#     legend_point_label=None, 
-#     with_markers=False,
-#     n_markers=5,
-# ):
-#     """
-#     Function to
-#     """
+import inspect
 
-#     colors = mpl.colormaps['hsv']
-#     norm = Normalize(vmin=-5.0, vmax=12.)
+# fitting a quadratic curve to the (klam, max_deviation) points to have a smooth estimate of the uncertainty as a function of klam
+def Quadratic(x, a, b, c):
+    return a*x**2 + b*x + c
 
-#     # lambdas = {}
-#     k_ZH_240 = {}
-#     k_ZH_365 = {}
-#     CH_values = {}
-#     CHbox_values = {}
+def plot_kZh_uncertainties_and_minuit_fit(
+    bsm_model,
+    klam,
+    curve,
+    label,
+    color,
+    sqrt_s,
+    plot_dir,
+    plot_name,
+    plot_name_suffix="",
+    fit_model=Quadratic,
+    save_fig=True,
+):
+    """
+    A function to plot the uncertainty estimates for k_Zh as a function of kappa_lambda, 
+    and to fit a curve to these points using the Minuit package. The fitted curve is also 
+    plotted together with the points.
 
-#     leg_handles = []
-#     for index, (curve, file_name, data_set, legend_loc, legend_col, legend_fontsize, marker, color_line, label_line, markersize) in enumerate(zip(curves, file_names, data_sets, legend_locs, legend_cols, legend_fontsizes, markers, color_lines, label_lines, markersizes)):
+    Parameters
+    ----------
+    bsm_model : str
+        The BSM model considered, to be shown in the label and legend
+    klam : list of float
+        The values of kappa_lambda for the points to be plotted
+    curve : list of float
+        The values of the uncertainty estimates for k_Zh corresponding to the klam points
+    label : str
+        The label for the points to be plotted, shown in the legend
+    color : str
+        The color for the points and the fit curve
+    sqrt_s : str
+        The center of mass energy considered, to be shown in the label and legend
+    plot_dir : str
+        The directory where to save the plot
+    plot_name : str
+        The name for the plot file, without extension and without suffixes
+    plot_name_suffix : str, optional
+        A suffix to be added to the plot name, after the main name and before the extension. 
+        Default is an empty string.
+    fit_model : function, optional
+        The function to be fitted to the points. The first argument must be kappa_lambda.
+        Default is a quadratic function.
+    save_fig : bool, optional
+        Whether to save the figure as a PDF file. Default is True.
 
-#         CH_values[curve] = []
-#         CHbox_values[curve] = []
-#         k_ZH_240[curve] = {}
-#         k_ZH_365[curve] = {}
+    Returns
+    -------
+    model_arguments : list of str
+        The names of the parameters of the fit model function, excluding the first 
+        argument (kappa_lambda).
+    fitted_parameters : list of float
+        The fitted values for the parameters of the fit model function, in the same order 
+        as model_arguments
+    """
 
-#         if file_name is not None and data_set is None:
+    fig, ax = plt.subplots(figsize=(4.0, 3.5), dpi=300)
+    ax.axhline(0, color='black', linestyle='--', linewidth=1.5)
+    ax.set_xlabel(r"$\kappa_\lambda$", fontsize=13)
+    ax.set_ylabel(r"$k_{Zh}$ uncertainty estimate", fontsize=12)
 
-#             with open(file_name, "r") as self_consistent_results_file:
-#                 lines = self_consistent_results_file.readlines()
-#                 for n, line in enumerate(lines):
-#                     columns = line.split()
+    ax.scatter(klam, curve, color=color, label=label+f" ({bsm_model} BPs)")
 
-#                     CH = float(columns[0])
-#                     CHbox = float(columns[1])
-#                     CH_values[curve].append(CH)
-#                     CHbox_values[curve].append(CHbox)
+    least_squares = LeastSquares(klam, curve, yerror=1e-4, model=fit_model)
+    model_arguments = list(inspect.signature(fit_model).parameters)[1:]
+    initial_values_parameters = { arg : 0 for arg in model_arguments }
 
-#                     if columns[-2].startswith("eeZH_FCCee240"):
-#                         k_ZH_240[curve][CH] = np.sqrt(float(columns[-1]))
-#                     elif columns[-2].startswith("eeZH_FCCee365"):
-#                         k_ZH_365[curve][CH] = np.sqrt(float(columns[-1]))
+    m = Minuit(least_squares, **initial_values_parameters)
+    m.migrad()
+    m.hesse()
 
-#             CH_values[curve] = CH_values[curve][::2]
-#             CHbox_values[curve] = CHbox_values[curve][::2]
+    fitted_parameters = [ m.values[arg] for arg in model_arguments ]
+    fitted_parameters_text = ", ".join(f"{arg}={value}" for arg, value in zip(model_arguments, fitted_parameters))
+    print(f"Fitted {fit_model.__name__} parameters: {fitted_parameters_text}")
 
-#             # lambdas_unique = [lmbd for i, lmbd in enumerate(lambdas[curve]) if i%2==0 ]
+    x_fit = np.linspace(min(klam), max(klam), 100)
+    y_fit = fit_model(x_fit, *fitted_parameters)
+    ax.plot(x_fit, y_fit, color=color, label=label+f" ({fit_model.__name__} fit)")
 
-#         elif file_name is None and data_set is not None:
-#             for bp in data_set:
-#                 CH = bp[2]
-#                 CH_values[curve].append(CH)
-#                 k_ZH_365[curve][CH] = bp[0] + 1
-#                 k_ZH_240[curve][CH] = bp[1] + 1
+    ax.grid(which='both', linestyle='--', linewidth=0.5)
+    ax.legend(fontsize=8.0, loc='best')
+    plt.tight_layout()
 
-#         color = list(colors(np.linspace(0.001, 0.9, len(CH_values[curve]))[::-1]))
-#         # color = list(colors(norm(-np.array(CH_values[curve]))))
-#         # print("color:", color)
+    if save_fig: fig.savefig(f'{plot_dir}/{plot_name}{plot_name_suffix}_{sqrt_s}_uncertainties_{fit_model.__name__}_fit.pdf')
 
-#         ax.plot([(k_ZH_365[curve][CH]-1) for CH in CH_values[curve]],
-#                 [(k_ZH_240[curve][CH]-1) for CH in CH_values[curve]],
-#                 color=color_line,
-#         )
-
-#         if with_markers:
-#             for i, CH in enumerate(CH_values[curve]):
-#                 if not i % math.ceil(len(CH_values[curve])/n_markers)==0:
-#                     continue
-
-#                 ax.plot((k_ZH_365[curve][CH]-1), (k_ZH_240[curve][CH]-1), marker=marker, ls="none", c=color[i], markersize=markersize, markeredgecolor='white', markeredgewidth=0.5)
+    return model_arguments, fitted_parameters
