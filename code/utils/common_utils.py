@@ -113,6 +113,14 @@ C1_decay_rates = {
     "gamgam" : 0.0049
 }
 
+C1_HLLHC_XS = {
+    "ggH" : 0.0066,
+    "VBF" : 0.0064,
+    "ZH" : 0.0118,
+    "WH" : 0.0103,
+    "ttH" : 0.0347, 
+}
+
 # Function to evaluate the vertex correction to sigma_Zh proportional to (klam-1)
 @np.vectorize
 def effZZh1Lkala_HEPfit_C1_values(lmdb, sqrt_s, C1_values=C1_hepfit):
