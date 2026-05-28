@@ -272,6 +272,7 @@ def save_BP_yaml_file(
         BP_data = {
             "kappas": BP_kappas,
             "EWPOs": BP_EWPOs,
+            "model_pars": BP_model_pars,
         }
 
         yaml.safe_dump(
@@ -281,8 +282,8 @@ def save_BP_yaml_file(
             default_flow_style=False,  # block style (readable)
         )
 
-        for par_name, par_value in BP_model_pars.items():
-            print(f"# {par_name} = {par_value}", file=BP_file)
+        # for par_name, par_value in BP_model_pars.items():
+        #     print(f"# {par_name} = {par_value}", file=BP_file)
 
         if end_comment is not None:
             print(end_comment, file=BP_file)
