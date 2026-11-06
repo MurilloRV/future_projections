@@ -1033,8 +1033,10 @@ def plot_kZh_uncertainties_and_minuit_fit(
     plot_dir,
     plot_name,
     plot_name_suffix="",
+    sigma_Zh_uncertainty=False,
     fit_model=Quadratic,
     save_fig=True,
+    add_to_existing_plot=False,
 ):
     """
     A function to plot the uncertainty estimates for k_Zh as a function of kappa_lambda, 
@@ -1065,8 +1067,12 @@ def plot_kZh_uncertainties_and_minuit_fit(
     fit_model : function, optional
         The function to be fitted to the points. The first argument must be kappa_lambda.
         Default is a quadratic function.
+    sigma_Zh_uncertainty : bool, optional
+        Whether the uncertainties refer to $\sigma_{Zh}$, as opposed to $\kappa_{Zh}$. Default is False.
     save_fig : bool, optional
         Whether to save the figure as a PDF file. Default is True.
+    add_to_existing_plot : bool, optional
+        Whether to add the points and the fit curve to an existing plot. Default is False.
 
     Returns
     -------
@@ -1078,10 +1084,18 @@ def plot_kZh_uncertainties_and_minuit_fit(
         as model_arguments
     """
 
-    fig, ax = plt.subplots(figsize=(4.0, 3.5), dpi=300)
+    if not add_to_existing_plot:
+        fig, ax = plt.subplots(figsize=(4.0, 3.5), dpi=300)
+    else:
+        fig = plt.gcf()
+        ax = plt.gca()
+
     ax.axhline(0, color='black', linestyle='--', linewidth=1.5)
     ax.set_xlabel(r"$\kappa_\lambda$", fontsize=13)
-    ax.set_ylabel(r"$k_{Zh}$ uncertainty estimate", fontsize=12)
+    if not sigma_Zh_uncertainty:
+        ax.set_ylabel(r"$k_{Zh}$ uncertainty estimate", fontsize=12)
+    else:
+        ax.set_ylabel(r"$\sigma_{Zh}$ uncertainty estimate", fontsize=12)
 
     ax.scatter(klam, curve, color=color, label=label+f" ({bsm_model} BPs)")
 
